@@ -1,36 +1,24 @@
-import { Layout, Menu } from "antd";
-const { Header, Content, Footer, Sider } = Layout;
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { createElement } from "react";
+import { Layout } from "antd";
+import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import { useAppDispatch } from "../../redux/hooks";
+import { logout } from "../../redux/features/auth/authSlice";
+const { Header, Content } = Layout;
 
 
-const items = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-    (icon, index) => ({
-        key: String(index + 1),
-        icon: createElement(icon),
-        label: `nav ${index + 1}`,
-    }),
-);
 
 
 const MainLayout = () => {
+    const dispatch = useAppDispatch()
+    const handleLogout = () => {
+        dispatch(logout())
+    }
+
     return (
-        <Layout>
-            <Sider
-                breakpoint="lg"
-                collapsedWidth="0"
-                onBreakpoint={(broken) => {
-                    console.log(broken);
-                }}
-                onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
-                }}
-            >
-                <div className="demo-logo-vertical" />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-            </Sider>
+        <Layout style={{ height: "100vh" }}>
+            <Sidebar />
             <Layout>
-                <Header style={{ padding: 0 }} />
+                <Header style={{ color: "white", fontWeight: "700", fontSize: "20px", cursor: "pointer" }} onClick={handleLogout}>Logout</Header>
                 <Content style={{ margin: '24px 16px 0' }}>
                     <div
                         style={{
@@ -38,12 +26,9 @@ const MainLayout = () => {
                             minHeight: 360,
                         }}
                     >
-                        Main Content Upload Here
+                        <Outlet />
                     </div>
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>
-                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
-                </Footer>
             </Layout>
         </Layout>
     );
