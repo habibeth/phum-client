@@ -15,7 +15,7 @@ const MainLayout = () => {
     }
 
     return (
-        <Layout style={{ height: "100vh" }}>
+        <Layout style={{ height: "100%" }}>
             <Sidebar />
             <Layout>
                 <Header style={{ color: "white", fontWeight: "700", fontSize: "20px", cursor: "pointer" }} onClick={handleLogout}>Logout</Header>
