@@ -10,6 +10,15 @@ import { toast } from "sonner";
 import { useCreateAcademicSemesterMutation } from "../../../redux/features/admin/academicManagement.api";
 import { TResponse } from "../../../types/global";
 
+
+type TSemesterData = {
+    name: string;
+    code: string;
+    year: string;
+    startMonth: string;
+    endMonth: string;
+}
+
 const currentYear = new Date().getFullYear();
 const yearOptions = [0, 1, 2, 3, 4].map(number => (
     {
@@ -36,8 +45,7 @@ const CreateAcademicSemester = () => {
             endMonth
         }
         try {
-            console.log(semesterData)
-            const res = await createAcademicSemester(semesterData) as TResponse;
+            const res = await createAcademicSemester(semesterData) as TResponse<TSemesterData>;
             if (res?.error) {
                 toast.error(res?.error?.data?.message, { id: toastId })
             }
