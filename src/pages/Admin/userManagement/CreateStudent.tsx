@@ -4,24 +4,80 @@ import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
 import PHInput from "../../../components/Form/PHInput";
 import { Button, Col, Divider, Form, Input, Row } from "antd";
 import PHSelect from "../../../components/Form/PHSelect";
-import { departmentOptions } from "../../../constant/department";
-import { semesterOptions } from "../../../constant/semester";
+import { bloodGroupOptions, genderOptions } from "../../../constant/globals";
+import PHDatePicker from "../../../components/Form/PHDatePicker";
+import { useGetAllDepartmentQuery, useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useAddStudentMutation } from "../../../redux/features/admin/userManagement.api";
+
+
+const sDefaultValues = {
+    "name": {
+        "firstName": "Ahsan",
+        "middleName": "Mukul",
+        "lastName": "Habib"
+    },
+    "gender": "male",
+    "email": "john.doe1234@gmail.com",
+    "contactNo": "123-456-7890",
+    "emergencyContactNo": "098-765-4321",
+    "bloogGroup": "O+",
+    "presentAddress": "1234 Elm Street, Springfield, IL",
+    "permanentAddress": "5678 Oak Avenue, Springfield, IL",
+    "guardian": {
+        "fatherName": "James Doe",
+        "fatherOccupation": "Engineer",
+        "fatherContactNo": "123-456-7890",
+        "motherName": "Jane Doe",
+        "motherOccupation": "Teacher",
+        "motherContactNo": "123-456-7890"
+    },
+    "localGuardian": {
+        "name": "Emily Smith",
+        "occupation": "Doctor",
+        "contactNo": "123-456-7890",
+        "address": "9101 Maple Lane, Springfield, IL"
+    },
+    "profileImage": "http://example.com/images/john_doe.jpg",
+    "isActive": "Active",
+    "admissionSemester": "66969869cefc49e191573818",
+    "academicDepartment": "66598dcc046652b3af27b673",
+
+}
 
 
 const CreateStudent = () => {
+    const [addStudent, { data, error }] = useAddStudentMutation();
+    console.log({ data, error })
+    const { data: sData, isLoading: sIsLoading } = useGetAllSemestersQuery(undefined);
+    const { data: dData, isLoading: dIsLoading } = useGetAllDepartmentQuery(undefined, { skip: sIsLoading });
+    const semesterOptions = sData?.data?.map(item => ({
+        value: item._id,
+        label: `${item.name} ${item.year}`
+    }))
+    const departmentOptions = dData?.data?.map(item => ({
+        value: item._id,
+        label: `${item.name}`
+    }))
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         console.log(data)
-        // const formData = new FormData();
-        // formData.append('data', JSON.stringify(data));
+        const studentData = {
+            password: "student123",
+            student: data,
+        }
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(studentData));
+        formData.append('file', data?.image)
+
+        addStudent(formData)
 
 
-        // console.log(Object.fromEntries(formData))
+        console.log(Object.fromEntries(formData))
         // console.log([...formData.entries()])
     }
     return (
         <Row>
             <Col span={24}>
-                <PHForm onSubmit={onSubmit}>
+                <PHForm onSubmit={onSubmit} defaultValues={sDefaultValues}>
                     <Divider>Personal Info.</Divider>
                     <Row gutter={8}>
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
@@ -34,13 +90,13 @@ const CreateStudent = () => {
                             <PHInput type="text" name="name.lastName" label="Last Name" />
                         </Col>
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
-                            <PHInput type="text" name="gender" label="Gender" />
+                            <PHSelect name="gender" label="Gender" options={genderOptions} />
                         </Col>
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
-                            <PHInput type="text" name="name.lastName" label="Date Of Birth" />
+                            <PHDatePicker name="dateOfBirth" label="Date Of Birth" />
                         </Col>
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
-                            <PHInput type="text" name="bloodGroup" label="Blood Group" />
+                            <PHSelect name="bloogGroup" label="Blood Group" options={bloodGroupOptions} />
                         </Col>
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                             <Controller
@@ -129,7 +185,7 @@ const CreateStudent = () => {
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                             <PHSelect
                                 options={semesterOptions}
-                                // disabled={sIsLoading}
+                                disabled={sIsLoading}
                                 name="admissionSemester"
                                 label="Admission Semester"
                             />
@@ -137,7 +193,7 @@ const CreateStudent = () => {
                         <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                             <PHSelect
                                 options={departmentOptions}
-                                // disabled={dIsLoading}
+                                disabled={dIsLoading}
                                 name="academicDepartment"
                                 label="Admission Department"
                             />
