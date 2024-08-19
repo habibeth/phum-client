@@ -24,6 +24,28 @@ export type TStudent = {
     fullName: string
 }
 
+export type TFaculties = {
+    profileImg?: string
+    _id: string
+    id: string
+    user: string
+    designation: string
+    name: TName
+    gender: string
+    dateOfBirth: string
+    email: string
+    contactNo: string
+    emergencyContactNo: string
+    bloodGroup: string
+    presentAddress: string
+    permanentAddress: string
+    profileImage: string
+    academicDepartment: TAcademicDepartment
+    academicFaculty: TAcademicFaculty
+    isDeleted: boolean
+    fullName: string
+}
+
 export type TUser = {
     needsPasswordChange: boolean
     _id: string

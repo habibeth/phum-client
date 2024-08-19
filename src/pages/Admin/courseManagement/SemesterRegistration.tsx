@@ -71,7 +71,6 @@ const SemesterRegistration = () => {
                 </PHForm>
             </Col>
         </Flex>
-
     );
 };
 

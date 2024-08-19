@@ -1,4 +1,4 @@
-import { Button, Dropdown, Space, Table, TableColumnsType, Tag } from "antd";
+import { Button, Dropdown, Table, TableColumnsType, Tag } from "antd";
 import { useGetAllSemesterRegistrationQuery, useUpdateSemesterRegistrationMutation } from "../../../redux/features/admin/courseManagement.api";
 import moment from "moment";
 import { TSemesterRegistration } from "../../../types/courseManagement.type";
@@ -40,7 +40,7 @@ const RegisteredSemester = () => {
         status
     }))
 
-    const handleStatusUpdate = (data) => {
+    const handleStatusUpdate = (data: any) => {
         const updateData = {
             id: semesterId,
             data: {

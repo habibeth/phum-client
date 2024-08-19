@@ -1,5 +1,5 @@
 import { TQueryParam, TResponseRedux } from "../../../types";
-import { TSemesterRegistration } from "../../../types/courseManagement.type";
+import { TCourse, TSemesterRegistration } from "../../../types/courseManagement.type";
 import { baseApi } from "../../api/baseApi";
 
 
@@ -43,8 +43,53 @@ const courseManagementApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['semesterRegistration']
         }),
+        getAllCourses: builder.query({
+            query: (args) => {
+                const params = new URLSearchParams();
+                if (args) {
+                    args.forEach((item: TQueryParam) => {
+                        params.append(item.name, item.value as string)
+                    });
+                }
+                return {
+                    url: '/courses',
+                    method: 'GET',
+                    params: params
+                }
+            },
+            providesTags: ['courses'],
+            transformResponse: (response: TResponseRedux<TCourse[]>) => {
+                return {
+                    data: response.data,
+                    meta: response.meta
+                }
+            }
+        }),
+        addCourse: builder.mutation({
+            query: (data) => ({
+                url: '/courses/create-course',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['courses']
+        }),
+        addAssignFaculties: builder.mutation({
+            query: (args) => ({
+                url: `/courses/${args.courseId}/assign-faculties`,
+                method: 'PUT',
+                body: args.data,
+            }),
+            invalidatesTags: ['courses']
+        }),
     })
 })
 
 
-export const { useAddSemesterRegistrationMutation, useGetAllSemesterRegistrationQuery, useUpdateSemesterRegistrationMutation } = courseManagementApi
+export const {
+    useAddSemesterRegistrationMutation,
+    useGetAllSemesterRegistrationQuery,
+    useUpdateSemesterRegistrationMutation,
+    useGetAllCoursesQuery,
+    useAddCourseMutation,
+    useAddAssignFacultiesMutation
+} = courseManagementApi

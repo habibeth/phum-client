@@ -4,6 +4,10 @@ import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
 
 
+interface ErrorMessage {
+    message: string;
+}
+
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/v1",
     credentials: 'include',
@@ -21,7 +25,8 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, DefinitionType> = async (args, api, extraOption): Promise<any> => {
     let result = await baseQuery(args, api, extraOption)
     // console.log(result)
-    if (result.error?.status === 404) {
+
+    if (result.error) {
         toast.error(result?.error?.data?.message)
     }
     if (result.error?.status === 401) {
@@ -53,6 +58,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, Definition
 export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithRefreshToken,
-    tagTypes: ['semesterRegistration'],
+    tagTypes: ['semesterRegistration', 'courses'],
     endpoints: () => ({})
 })

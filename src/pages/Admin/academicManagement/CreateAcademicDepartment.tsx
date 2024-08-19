@@ -8,7 +8,7 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import { departmentOptions } from "../../../constant/department";
 import { useState } from "react";
 import { TQueryParam, TResponse } from "../../../types";
-import { useCreateAcademicDepartmentMutation, useGetAllFacultyQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useCreateAcademicDepartmentMutation, useGetAllAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement.api";
 import { toast } from "sonner";
 
 type TDepartment = {
@@ -18,7 +18,7 @@ type TDepartment = {
 
 const CreateAcademicDepartment = () => {
     const [params, setParams] = useState<TQueryParam[] | undefined>(undefined)
-    const { data: facultyData } = useGetAllFacultyQuery(params);
+    const { data: facultyData } = useGetAllAcademicFacultiesQuery(params);
     const [createAcademicDepartment] = useCreateAcademicDepartmentMutation()
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
