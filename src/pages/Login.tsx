@@ -25,8 +25,8 @@ const Login = () => {
     // console.log('Data ==>', data);
     // console.log('Error ==>', error);
     const defaultValues = {
-        id: "A-0001",
-        password: "admin123"
+        id: "2024020001",
+        password: "student123"
     }
 
     const onSubmit = async (data: FieldValues) => {
@@ -42,13 +42,19 @@ const Login = () => {
             const user = verifyToken(token) as TUser
             dispatch(setUser({ user: user, token: token }))
             toast.success("User Login Successfully!", { id: toastId })
-            navigate(`/${user.role}/dashboard`)
+
+            if (res?.data.needsPasswordChange) {
+                return navigate(`/change-password`)
+            }
+            else {
+                return navigate(`/${user.role}/dashboard`)
+            }
         } catch (error) {
             toast.error("Something went to Wrong", { id: toastId })
         }
     }
     return (
-        <Row justify={"center"} align={"middle"} style={{ height: "100vh" }}>
+        <Row justify={"center"} align={"middle"} style={{ height: "100vh", width: "100%" }}>
             <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
                 <PHInput type="text" name="id" label={"ID: "} />
                 <PHInput type="text" name="password" label={"Password: "} />

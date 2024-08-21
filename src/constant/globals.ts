@@ -13,6 +13,8 @@ export const months = [
     "December"
 ];
 
+const weekdays = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
 export const gender = ['Male', 'Female', 'Other'];
 
 export const bloodGroup = [
@@ -41,3 +43,8 @@ export const bloodGroupOptions = bloodGroup?.map(item => ({
     label: item,
     value: item,
 }))
+
+export const weekDaysOptions = weekdays.map((item) => ({
+    value: item,
+    label: item,
+}));

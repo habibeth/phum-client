@@ -4,9 +4,6 @@ import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
 
 
-interface ErrorMessage {
-    message: string;
-}
 
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/v1",
@@ -26,10 +23,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, Definition
     let result = await baseQuery(args, api, extraOption)
     // console.log(result)
 
-    if (result.error) {
+    if (result?.error?.status === 404) {
         toast.error(result?.error?.data?.message)
     }
-    if (result.error?.status === 401) {
+    if (result?.error?.status === 403) {
+        toast.error(result?.error?.data?.message)
+    }
+    if (result?.error?.status === 401) {
         const res = await fetch('http://localhost:5000/api/v1/auth/refresh-token', {
             method: 'POST',
             credentials: 'include',
