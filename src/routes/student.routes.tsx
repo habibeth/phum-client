@@ -1,3 +1,4 @@
+import EnrolledCourse from "../pages/Student/EnrolledCourse";
 import OfferedCourse from "../pages/Student/OfferedCourse";
 import StudentDashboard from "../pages/Student/StudentDashboard";
 
@@ -11,6 +12,11 @@ export const studentPaths = [
         name: "Offered Course",
         path: "offered-course",
         element: <OfferedCourse />
+    },
+    {
+        name: "Enrolled Courses",
+        path: "enroll-course",
+        element: <EnrolledCourse />
     },
 
 ]

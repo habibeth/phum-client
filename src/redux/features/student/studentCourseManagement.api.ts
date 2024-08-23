@@ -1,4 +1,4 @@
-import { TResponseRedux } from "../../../types";
+import { TQueryParam, TResponseRedux } from "../../../types";
 import { TOfferedCourse } from "../../../types/studentCourse.type";
 import { baseApi } from "../../api/baseApi";
 
@@ -13,11 +13,12 @@ const studentCourseApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: '/offered-courses/get-offered-courses',
+                    url: '/offered-courses/my-offered-courses',
                     method: 'GET',
                     params: params
                 }
             },
+            providesTags: ['OfferedCourse'],
             transformResponse: (response: TResponseRedux<TOfferedCourse[]>) => {
                 return {
                     data: response.data,
@@ -25,18 +26,42 @@ const studentCourseApi = baseApi.injectEndpoints({
                 }
             }
         }),
-        // addSemesterRegistration: builder.mutation({
-        //     query: (data) => ({
-        //         url: '/semester-registrations/create-semester-registration',
-        //         method: 'POST',
-        //         body: data,
-        //     }),
-        //     invalidatesTags: ['semesterRegistration']
-        // }),
+        enrollCourse: builder.mutation({
+            query: (data) => ({
+                url: '/enrolled-courses/create-enrolled-course',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['OfferedCourse']
+        }),
+        getAllEnrolledCourse: builder.query({
+            query: (args) => {
+                const params = new URLSearchParams();
+                if (args) {
+                    args.forEach((item: TQueryParam) => {
+                        params.append(item.name, item.value as string)
+                    });
+                }
+                return {
+                    url: '/enrolled-courses/my-enrolled-courses',
+                    method: 'GET',
+                    params: params
+                }
+            },
+            providesTags: ['OfferedCourse'],
+            transformResponse: (response: TResponseRedux<any>) => {
+                return {
+                    data: response.data,
+                    meta: response.meta
+                }
+            }
+        }),
     })
 })
 
 
 export const {
-    useGetAllOfferedCourseQuery
+    useGetAllOfferedCourseQuery,
+    useEnrollCourseMutation,
+    useGetAllEnrolledCourseQuery
 } = studentCourseApi

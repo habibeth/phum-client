@@ -25,8 +25,8 @@ const Login = () => {
     // console.log('Data ==>', data);
     // console.log('Error ==>', error);
     const defaultValues = {
-        id: "2024020001",
-        password: "student123"
+        id: "F-0001",
+        password: "faculty123"
     }
 
     const onSubmit = async (data: FieldValues) => {

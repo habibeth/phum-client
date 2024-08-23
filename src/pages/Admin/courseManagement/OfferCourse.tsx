@@ -9,6 +9,7 @@ import PHSelect from "../../../components/Form/PHSelect";
 import { weekDaysOptions } from "../../../constant/globals";
 import PHTimePicker from "../../../components/Form/PHTimePicker";
 import moment from "moment";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 
 const OfferCourse = () => {
     const [courseId, setCourseId] = useState('');
@@ -54,13 +55,13 @@ const OfferCourse = () => {
         label: item.title,
     }));
 
-    const facultiesOptions = facultiesData?.data?.faculties?.map((item) => ({
+    const facultiesOptions = facultiesData?.data?.faculties?.map((item: any) => ({
         value: item._id,
         label: item.fullName,
     }));
 
 
-    const onSubmit = async (data) => {
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const offeredCourseData = {
             ...data,
             maxCapacity: Number(data.maxCapacity),
@@ -70,7 +71,7 @@ const OfferCourse = () => {
         }
 
         const res = await addOfferedCourse(offeredCourseData);
-        console.log(offeredCourseData);
+        console.log(res);
     }
     return (
         <div>

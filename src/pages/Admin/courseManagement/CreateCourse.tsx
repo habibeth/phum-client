@@ -21,13 +21,11 @@ import { TResponse } from "../../../types";
 const CreateCourse = () => {
 
     const [addCourse] = useAddCourseMutation();
-    const { data: courses } = useGetAllCoursesQuery([
-        { name: 'sort', value: "code" }
-    ])
+    const { data: courses } = useGetAllCoursesQuery(undefined)
 
     const preRequisiteCoursesOption = courses?.data?.map((item: any) => ({
         value: item._id,
-        label: `${item.title}`
+        label: item.title,
     }));
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const toastId = toast.loading('Creating ....')
@@ -37,7 +35,7 @@ const CreateCourse = () => {
             code: Number(data.code),
             credits: Number(data.credits),
             isDeleted: false,
-            preRequisiteCourses: data.preRequisiteCourses ? data.preRequisiteCourses?.map((item: any) => ({
+            preRequisiteCourses: data?.preRequisiteCourses ? data?.preRequisiteCourses?.map((item: any) => ({
                 course: item,
                 isDeleted: false,
             })) : []
