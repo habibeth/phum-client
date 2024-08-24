@@ -26,10 +26,18 @@ const facultyCourseApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        updateCourseMarks: builder.mutation({
+            query: (data) => ({
+                url: '/enrolled-courses/update-enrolled-course',
+                method: 'PATCH',
+                body: data,
+            })
+        }),
     })
 })
 
 
 export const {
-    useGetAllFacultiesCourseQuery
-} = facultyCourseApi
+    useGetAllFacultiesCourseQuery,
+    useUpdateCourseMarksMutation
+}: any = facultyCourseApi
